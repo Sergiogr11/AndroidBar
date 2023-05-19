@@ -65,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (loginExitoso) {
                                 // Continuar a la siguiente actividad
                                 //TODO siguiente actividad
-                                //Intent intent = new Intent(LoginActivity.this, NextActivity.class);
-                                //startActivity(intent);
-                                Toast.makeText(LoginActivity.this, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MesasActivity.class);
+                                startActivity(intent);
+                                //Toast.makeText(LoginActivity.this, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show();
                             } else {
                                 // El inicio de sesión falló, mostrar un mensaje de error al usuario
                                 Toast.makeText(LoginActivity.this, "Inicio de sesión incorrecto", Toast.LENGTH_SHORT).show();
