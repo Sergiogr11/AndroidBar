@@ -1,20 +1,8 @@
 package com.example.androidbar.model;
 
 public class Usuario {
-    private int userId;
     private String username;
-    private String correo;
     private String password;
-    private String rol;
-    private String telefono;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;
@@ -24,13 +12,6 @@ public class Usuario {
         this.username = username;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
 
     public String getPassword() {
         return password;
@@ -38,21 +19,5 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
     }
 }
