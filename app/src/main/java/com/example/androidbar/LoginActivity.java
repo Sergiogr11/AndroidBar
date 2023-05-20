@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (loginExitoso) {
                                 // Continuar a la siguiente actividad
                                 Intent intent = new Intent(LoginActivity.this, MesasActivity.class);
+                                intent.putExtra("usuario", usuario);
                                 startActivity(intent);
                             } else {
                                 // El inicio de sesión falló, mostrar un mensaje de error al usuario
