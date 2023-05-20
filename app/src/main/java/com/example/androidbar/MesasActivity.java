@@ -14,12 +14,14 @@ import android.widget.Toast;
 import com.example.androidbar.model.Articulo;
 import com.example.androidbar.model.Comanda;
 import com.example.androidbar.model.Mesa;
+import com.example.androidbar.model.Usuario;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiComandas;
 import com.example.androidbar.network.ApiMesas;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayout;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import okhttp3.MediaType;
@@ -36,7 +38,6 @@ public class MesasActivity extends AppCompatActivity {
     private Comanda comandaActiva;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,6 @@ public class MesasActivity extends AppCompatActivity {
         Button barButton = findViewById(R.id.btnBar);
         Button terrazaButton = findViewById(R.id.btnTerraza);
 
-
         // Configurar el wrap en el FlexboxLayout
         flexboxLayout.setFlexWrap(FlexWrap.WRAP);
 
@@ -56,6 +56,7 @@ public class MesasActivity extends AppCompatActivity {
         restauranteButton.setOnClickListener(v -> actualizarMesas("Restaurante"));
         barButton.setOnClickListener(v -> actualizarMesas("Bar"));
         terrazaButton.setOnClickListener(v -> actualizarMesas("Terraza"));
+
         //Inicializo la api de mesas de retrofit
         apiMesas = ApiClient.getClient().create(ApiMesas.class);
     }
@@ -98,9 +99,9 @@ public class MesasActivity extends AppCompatActivity {
         button.setText(mesa.getNombreMesa());
 
         //Depenediendo del estado de la mesa cambio el color del boton
-        if(mesa.getEstadoMesa().equals("Libre")){
+        if (mesa.getEstadoMesa().equals("Libre")) {
             button.setBackgroundColor(Color.parseColor("#00FF00"));
-        }else if (mesa.getEstadoMesa().equals("Ocupada")){
+        } else if (mesa.getEstadoMesa().equals("Ocupada")) {
             button.setBackgroundColor(Color.parseColor("#CF0808"));
         }
         button.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +109,11 @@ public class MesasActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //TODO
                 //Obtengo comanda mesa
-                Comanda comanda  = obtenerComandaMesa(mesa);
+                Comanda comanda = obtenerComandaMesa(mesa);
 
                 // Crear un intent y agregar la comanda como extra
                 Intent intent = new Intent(MesasActivity.this, ListaArticulosActivity.class);
-                if(comanda != null){
+                if (comanda != null) {
                     intent.putExtra("comanda", comanda);
                 }
 
@@ -145,9 +146,9 @@ public class MesasActivity extends AppCompatActivity {
         return button;
     }
 
-    private Comanda obtenerComandaMesa(Mesa mesa){
+    private Comanda obtenerComandaMesa(Mesa mesa) {
         //Obtengo la comanda asociada a la mesa, si la mesa esta ocupada
-        if(mesa.getEstadoMesa().equals("Ocupada")){
+        if (mesa.getEstadoMesa().equals("Ocupada")) {
             //Realizo la llamada a mi api para encontrar las mesas de la posicion
             Call<Comanda> call = apiComandas.findLastComandaByMesa(mesa.getMesaId());
             call.enqueue(new Callback<Comanda>() {
@@ -163,15 +164,37 @@ public class MesasActivity extends AppCompatActivity {
                     Toast.makeText(MesasActivity.this, "No hay comanda asociada ", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else{
-            comandaActiva = new Comanda();
-            comandaActiva.setNumeroComanda();
-            comandaActiva.setPrecioTotal(0);
-            comandaActiva.setFechaHoraApertura();
-            comandaActiva.setNumeroComensales(mesa.getCapacidad());
-            comandaActiva.setUsuarioId();
-            comandaActiva.setMesaId(mesa.getMesaId());
+        } else {
+            Usuario usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+            LocalDateTime now = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                now = LocalDateTime.now();
+            }
+
+            try {
+                // Obtengo el máximo ID de comanda desde la API
+                Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
+                Response<Integer> responseMaxId = callMaxId.execute();
+
+                if (responseMaxId.isSuccessful()) {
+                    int comandaId = responseMaxId.body();
+
+                    comandaActiva = new Comanda();
+                    comandaActiva.setNumeroComanda(comandaId);
+                    comandaActiva.setPrecioTotal(0);
+                    comandaActiva.setFechaHoraApertura(now);
+                    comandaActiva.setNumeroComensales(mesa.getCapacidad());
+                    comandaActiva.setUsuarioId(usuario.getUserId());
+                    comandaActiva.setMesaId(mesa.getMesaId());
+                    System.out.println(comandaActiva);
+                }else{
+                    Toast.makeText(MesasActivity.this, "Error al obtener el máximo ID de comanda", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                Toast.makeText(MesasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
         }
         return comandaActiva;
-        }
+    }
+
 }

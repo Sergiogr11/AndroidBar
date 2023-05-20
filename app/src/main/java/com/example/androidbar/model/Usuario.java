@@ -5,16 +5,16 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
     private String username;
     private String password;
-    private String userId;
+    private int userId;
     private String correo;
     private String rol;
     private String telefono;
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
