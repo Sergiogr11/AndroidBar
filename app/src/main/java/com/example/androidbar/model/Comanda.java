@@ -1,8 +1,9 @@
 package com.example.androidbar.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Comanda {
+public class Comanda implements Serializable {
 
     private int numeroComanda;
     private float precioTotal;
