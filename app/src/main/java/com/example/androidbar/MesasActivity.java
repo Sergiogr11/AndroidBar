@@ -36,12 +36,17 @@ public class MesasActivity extends AppCompatActivity {
     private FlexboxLayout flexboxLayout;
     private ApiComandas apiComandas;
     private Comanda comandaActiva;
+    private Usuario usuario;
+    private String mesaSeleccionada;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mesas);
+
+        // Obtener el Usuario
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
 
         //Asigno los ids de todos los elementos
         flexboxLayout = findViewById(R.id.flexboxLayout);
@@ -57,8 +62,9 @@ public class MesasActivity extends AppCompatActivity {
         barButton.setOnClickListener(v -> actualizarMesas("Bar"));
         terrazaButton.setOnClickListener(v -> actualizarMesas("Terraza"));
 
-        //Inicializo la api de mesas de retrofit
+        //Inicializo la api de mesas y comandas de retrofit
         apiMesas = ApiClient.getClient().create(ApiMesas.class);
+        apiComandas = ApiClient.getClient().create(ApiComandas.class);
     }
 
     private void actualizarMesas(String posicion) {
@@ -107,21 +113,9 @@ public class MesasActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                //Obtengo comanda mesa
-                Comanda comanda = obtenerComandaMesa(mesa);
-
-                // Crear un intent y agregar la comanda como extra
-                Intent intent = new Intent(MesasActivity.this, ListaArticulosActivity.class);
-                if (comanda != null) {
-                    intent.putExtra("comanda", comanda);
-                }
-
-                // Iniciar la siguiente actividad
-                startActivity(intent);
-
-                // Realizar acción al hacer clic en la mesa
-                //Toast.makeText(MesasActivity.this, "Mesa seleccionada: " + mesa.getNombreMesa(), Toast.LENGTH_SHORT).show();
+                mesaSeleccionada = mesa.getNombreMesa();
+                // Obtener la comanda de la mesa
+                obtenerComandaMesa(mesa);
             }
         });
 
@@ -146,7 +140,7 @@ public class MesasActivity extends AppCompatActivity {
         return button;
     }
 
-    private Comanda obtenerComandaMesa(Mesa mesa) {
+    private void obtenerComandaMesa(Mesa mesa) {
         //Obtengo la comanda asociada a la mesa, si la mesa esta ocupada
         if (mesa.getEstadoMesa().equals("Ocupada")) {
             //Realizo la llamada a mi api para encontrar las mesas de la posicion
@@ -156,6 +150,10 @@ public class MesasActivity extends AppCompatActivity {
                 public void onResponse(Call<Comanda> call, Response<Comanda> response) {
                     if (response.isSuccessful()) {
                         comandaActiva = response.body();
+                        // Iniciar la actividad de la lista de artículos con la comanda obtenida
+                        iniciarListaArticulosActivity();
+                    }else{
+                        Toast.makeText(MesasActivity.this, "Error al obtener comanda asociada ", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -165,36 +163,57 @@ public class MesasActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Usuario usuario = (Usuario) getIntent().getSerializableExtra("usuario");
-            LocalDateTime now = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                now = LocalDateTime.now();
-            }
+            // Crear una nueva comanda si la mesa está libre
+            crearNuevaComanda(mesa, usuario);
+        }
+    }
 
-            try {
-                // Obtengo el máximo ID de comanda desde la API
-                Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
-                Response<Integer> responseMaxId = callMaxId.execute();
+    // Crear una nueva comanda cuando la mesa está libre
+    private void crearNuevaComanda(Mesa mesa, Usuario usuario) {
+        // Creo un objeto LocalDateTime para la fecha y hora actuales
+        LocalDateTime now = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            now = LocalDateTime.now();
+        }
 
-                if (responseMaxId.isSuccessful()) {
-                    int comandaId = responseMaxId.body();
+        // Realizo una llamada a mi API para obtener el ID de comanda máximo
+        Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
+        LocalDateTime finalNow = now;
+        callMaxId.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int comandaId = response.body() + 1;
 
                     comandaActiva = new Comanda();
                     comandaActiva.setNumeroComanda(comandaId);
                     comandaActiva.setPrecioTotal(0);
-                    comandaActiva.setFechaHoraApertura(now);
+                    comandaActiva.setFechaHoraApertura(finalNow);
                     comandaActiva.setNumeroComensales(mesa.getCapacidad());
                     comandaActiva.setUsuarioId(usuario.getUserId());
                     comandaActiva.setMesaId(mesa.getMesaId());
-                    System.out.println(comandaActiva);
-                }else{
+
+                    iniciarListaArticulosActivity();
+                } else {
                     Toast.makeText(MesasActivity.this, "Error al obtener el máximo ID de comanda", Toast.LENGTH_SHORT).show();
                 }
-            } catch (IOException e) {
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
                 Toast.makeText(MesasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
-        }
-        return comandaActiva;
+        });
     }
 
+
+    // Método para iniciar la actividad de la lista de artículos
+    private void iniciarListaArticulosActivity() {
+        Intent intent = new Intent(MesasActivity.this, ListaArticulosActivity.class);
+        if (comandaActiva != null) {
+            intent.putExtra("mesa", mesaSeleccionada);
+            intent.putExtra("comanda", comandaActiva);
+        }
+        startActivity(intent);
+    }
 }

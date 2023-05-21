@@ -13,6 +13,8 @@ import com.example.androidbar.model.Usuario;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiUsuarios;
 
+import java.lang.reflect.InvocationTargetException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,10 +47,11 @@ public class LoginActivity extends AppCompatActivity {
                 // Obtener el nombre de usuario y la contraseña ingresados
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                Usuario usuario = new Usuario();
 
-                usuario.setPassword(password);
-                usuario.setUsername(username);
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Los campos están vacíos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // Realizar la llamada al método login de la interfaz ApiUsuarios
                 Call<Boolean> call = apiUsuarios.login(username, password);
@@ -59,28 +62,48 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.isSuccessful()) {
                             boolean loginExitoso = response.body();
-                            System.out.println(response.body());
 
                             // Verificar si el inicio de sesión fue exitoso
                             if (loginExitoso) {
-                                // Continuar a la siguiente actividad
-                                Intent intent = new Intent(LoginActivity.this, MesasActivity.class);
-                                intent.putExtra("usuario", usuario);
-                                startActivity(intent);
+                                // Buscar al usuario por su nombre de usuario
+                                    Call<Usuario> userCall = apiUsuarios.findUsuario(username);
+
+                                    userCall.enqueue(new Callback<Usuario>() {
+                                        @Override
+                                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                                            if (response.isSuccessful()) {
+                                                // Establecer el usuario y continuar a la siguiente actividad
+                                                Usuario usuario = response.body();
+                                                Intent intent = new Intent(LoginActivity.this, MesasActivity.class);
+                                                intent.putExtra("usuario", usuario);
+                                                startActivity(intent);
+                                            } else {
+                                                // Ocurrió un error en la solicitud
+                                                Toast.makeText(LoginActivity.this, "Error al obtener usuario", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Usuario> call, Throwable t) {
+                                            // Ocurrió un error en la comunicación con el servidor
+                                            Toast.makeText(LoginActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else{
+                                    // El inicio de sesión falló, mostrar un mensaje de error al usuario
+                                    Toast.makeText(LoginActivity.this, "El usuario o contraseña no son correctos", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                // El inicio de sesión falló, mostrar un mensaje de error al usuario
-                                Toast.makeText(LoginActivity.this, "Inicio de sesión incorrecto", Toast.LENGTH_SHORT).show();
+                                // Ocurrió un error en la solicitud
+                                Toast.makeText(LoginActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            // Ocurrió un error en la solicitud
-                            Toast.makeText(LoginActivity.this, "Error en la solicitud", Toast.LENGTH_SHORT).show();
-                        }
+
                     }
 
                     @Override
                     public void onFailure(Call<Boolean> call, Throwable t) {
                         // Ocurrió un error en la comunicación con el servidor
-                        Toast.makeText(LoginActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

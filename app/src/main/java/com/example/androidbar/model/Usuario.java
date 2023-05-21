@@ -3,10 +3,11 @@ package com.example.androidbar.model;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
-    private String username;
-    private String password;
+
     private int userId;
+    private String username;
     private String correo;
+    private String password;
     private String rol;
     private String telefono;
 
