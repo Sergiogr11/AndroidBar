@@ -1,5 +1,6 @@
 package com.example.androidbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -77,11 +78,19 @@ public class ListaArticulosActivity extends AppCompatActivity {
         listViewArticulos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Obtener la categoría seleccionada
-                Categoria categoriaSeleccionada = categorias.get(position);
+                if (showingCategories) {
+                    // Obtener la categoría seleccionada
+                    Categoria categoriaSeleccionada = categorias.get(position);
+                    // Obtener los artículos correspondientes a la categoría seleccionada
+                    obtenerArticulosPorCategoria(categoriaSeleccionada.getCategoriaId());
+                } else {
+                    // Si se están mostrando los artículos, obtener el ID del artículo seleccionado y abrir su página
+                    Articulo articuloSeleccionado = articulos.get(position);
+                    obtenerDetalleArticulo(articuloSeleccionado);
+                }
 
-                // Obtener los artículos correspondientes a la categoría seleccionada
-                obtenerArticulosPorCategoria(categoriaSeleccionada.getCategoriaId());
+
+
             }
         });
 
@@ -168,4 +177,12 @@ public class ListaArticulosActivity extends AppCompatActivity {
             showingCategories = true;
         }
     }
+
+    public void obtenerDetalleArticulo(Articulo articulo){
+
+        Intent intent = new Intent(ListaArticulosActivity.this, ArticuloDetalleActivity.class);
+        intent.putExtra("articulo", articulo);  // Asegúrate de que tu clase Articulo implemente Serializable o Parcelable
+        startActivity(intent);
+    }
+
 }

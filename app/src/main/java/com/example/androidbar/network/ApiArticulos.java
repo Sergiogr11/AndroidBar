@@ -14,9 +14,8 @@ import retrofit2.http.Path;
 
 public interface ApiArticulos  {
 
-    @POST("findByCategoria/{categoriaId}")
-    Call<List<String>> findByCategoria(@Path("categoriaId") int categoriaId);
-
     @POST("findArticulosbyCategoria/{categoriaId}")
     Call<List<Articulo>> findArticulosbyCategoria(@Path("categoriaId") int categoriaId);
+
+
 }
