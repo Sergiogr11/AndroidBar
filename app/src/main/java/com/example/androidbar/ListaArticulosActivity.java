@@ -1,6 +1,5 @@
 package com.example.androidbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,14 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidbar.model.Articulo;
 import com.example.androidbar.model.Categoria;
-import com.example.androidbar.model.Comanda;
-import com.example.androidbar.model.Mesa;
-import com.example.androidbar.model.Usuario;
 import com.example.androidbar.network.ApiArticulos;
 import com.example.androidbar.network.ApiCategorias;
 import com.example.androidbar.network.ApiClient;
-import com.example.androidbar.network.ApiComandas;
-import com.example.androidbar.network.ApiMesas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +41,8 @@ public class ListaArticulosActivity extends AppCompatActivity {
     private List<Categoria> categorias;
     private List<Articulo> articulos;
 
+    private boolean showingCategories = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +67,7 @@ public class ListaArticulosActivity extends AppCompatActivity {
         articulos = new ArrayList<>();
 
         // Configurar el adaptador para la lista de artículos
-        ArrayAdapter<Articulo> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, articulos);
+        ArrayAdapter<Articulo> adapter = new ArrayAdapter<>(this, R.layout.layout_celdas, articulos);
         listViewArticulos.setAdapter(adapter);
 
         // Cargar las categorías desde la base de datos
@@ -119,45 +115,57 @@ public class ListaArticulosActivity extends AppCompatActivity {
     }
 
     private void cargarCategorias() {
+        showingCategories = true;
         Call<List<Categoria>> call = apiCategorias.readCategoria();
-        call.enqueue(new Callback<List<Categoria>>() {
-            @Override
-            public void onResponse(Call<List<Categoria>> call, Response<List<Categoria>> response) {
-                if (response.isSuccessful()) {
-                    categorias = response.body();
-                    ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(ListaArticulosActivity.this, android.R.layout.simple_list_item_1, categorias);
-                    listViewArticulos.setAdapter(adapter);
+            call.enqueue(new Callback<List<Categoria>>() {
+                @Override
+                public void onResponse(Call<List<Categoria>> call, Response<List<Categoria>> response) {
+                    if (response.isSuccessful()) {
+                        categorias = response.body();
+                        ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(ListaArticulosActivity.this, R.layout.layout_celdas, categorias);
+                        listViewArticulos.setAdapter(adapter);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Categoria>> call, Throwable t) {
-                Toast.makeText(ListaArticulosActivity.this, "No hay categorias disponibles ", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Categoria>> call, Throwable t) {
+                    Toast.makeText(ListaArticulosActivity.this, "No hay categorias disponibles ", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
 
 
     private void obtenerArticulosPorCategoria(Integer categoriaId) {
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody requestBody = RequestBody.create(mediaType, String.valueOf(categoriaId));
+        showingCategories = false;
 
-        Call<List<Articulo>> call = apiArticulos.findByCategoria(requestBody);
-        call.enqueue(new Callback<List<Articulo>>() {
-            @Override
-            public void onResponse(Call<List<Articulo>> call, Response<List<Articulo>> response) {
-                if (response.isSuccessful()) {
-                    articulos = response.body();
-                    ArrayAdapter<Articulo> adapter = new ArrayAdapter<>(ListaArticulosActivity.this, android.R.layout.simple_list_item_1, articulos);
-                    listViewArticulos.setAdapter(adapter);
+        Call<List<Articulo>> call = apiArticulos.findArticulosbyCategoria(categoriaId);
+            call.enqueue(new Callback<List<Articulo>>() {
+                @Override
+                public void onResponse(Call<List<Articulo>> call, Response<List<Articulo>> response) {
+                    if (response.isSuccessful()) {
+                        articulos = response.body();
+                        ArrayAdapter<Articulo> adapter = new ArrayAdapter<>(ListaArticulosActivity.this, R.layout.layout_celdas, articulos);
+                        listViewArticulos.setAdapter(adapter);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Articulo>> call, Throwable t) {
-                Toast.makeText(ListaArticulosActivity.this, "No hay articulos disponibles ", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Articulo>> call, Throwable t) {
+                    Toast.makeText(ListaArticulosActivity.this, "No hay articulos disponibles ", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (showingCategories) {
+            // Si ya estamos mostrando categorías, hacer la acción predeterminada (probablemente cerrar la actividad)
+            super.onBackPressed();
+        } else {
+            // Si está mostrando artículos, volver a cargar las categorías
+            cargarCategorias();
+            showingCategories = true;
+        }
     }
 }

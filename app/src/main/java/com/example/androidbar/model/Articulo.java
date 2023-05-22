@@ -1,6 +1,10 @@
 package com.example.androidbar.model;
 
-public class Articulo {
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+
+public class Articulo implements Serializable {
 
     private int articuloId;
     private String nombreArticulo;
@@ -46,5 +50,11 @@ public class Articulo {
 
     public void setCategoriaId(int categoriaId) {
         this.categoriaId = categoriaId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getNombreArticulo();
     }
 }

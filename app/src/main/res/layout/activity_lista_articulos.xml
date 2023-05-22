@@ -8,7 +8,7 @@
     <ListView
         android:id="@+id/listViewArticulos"
         android:layout_width="363dp"
-        android:layout_height="492dp"
+        android:layout_height="500dp"
         android:layout_marginTop="160dp"
         android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toTopOf="@+id/btnEditar"
@@ -54,9 +54,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/listViewArticulos"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
+        app:layout_constraintHorizontal_bias="0.084"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintVertical_bias="0.543" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

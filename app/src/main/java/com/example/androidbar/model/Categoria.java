@@ -1,5 +1,7 @@
 package com.example.androidbar.model;
 
+import androidx.annotation.NonNull;
+
 public class Categoria {
 
     private int categoriaId;
@@ -28,5 +30,11 @@ public class Categoria {
 
     public void setDescripcionCategoria(String descripcionCategoria) {
         this.descripcionCategoria = descripcionCategoria;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getNombreCategoria();
     }
 }
