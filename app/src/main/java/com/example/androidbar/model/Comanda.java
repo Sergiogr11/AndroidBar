@@ -1,14 +1,15 @@
 package com.example.androidbar.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Comanda implements Serializable {
 
     private int numeroComanda;
     private float precioTotal;
-    private LocalDateTime fechaHoraApertura;
-    private LocalDateTime fechaHoraCierre;
+    private long fechaHoraApertura;
+    private long fechaHoraCierre;
     private int numeroComensales;
     private int usuarioId;
     private int mesaId;
@@ -29,19 +30,19 @@ public class Comanda implements Serializable {
         this.precioTotal = precioTotal;
     }
 
-    public LocalDateTime getFechaHoraApertura() {
+    public long getFechaHoraApertura() {
         return fechaHoraApertura;
     }
 
-    public void setFechaHoraApertura(LocalDateTime fechaHoraApertura) {
+    public void setFechaHoraApertura(long fechaHoraApertura) {
         this.fechaHoraApertura = fechaHoraApertura;
     }
 
-    public LocalDateTime getFechaHoraCierre() {
+    public long getFechaHoraCierre() {
         return fechaHoraCierre;
     }
 
-    public void setFechaHoraCierre(LocalDateTime fechaHoraCierre) {
+    public void setFechaHoraCierre(long fechaHoraCierre) {
         this.fechaHoraCierre = fechaHoraCierre;
     }
 

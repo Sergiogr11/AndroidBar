@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidbar.model.Articulo;
 import com.example.androidbar.model.Categoria;
+import com.example.androidbar.model.Comanda;
 import com.example.androidbar.network.ApiArticulos;
 import com.example.androidbar.network.ApiCategorias;
 import com.example.androidbar.network.ApiClient;
@@ -34,6 +35,7 @@ public class ListaArticulosActivity extends AppCompatActivity {
     private Button btnRealizarPedido;
     private TextView mesaActiva;
 
+
     private ApiCategorias apiCategorias;
     private ApiArticulos apiArticulos;
 
@@ -43,6 +45,8 @@ public class ListaArticulosActivity extends AppCompatActivity {
     private List<Articulo> articulos;
 
     private boolean showingCategories = true;
+
+    private Comanda comandaActiva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +185,8 @@ public class ListaArticulosActivity extends AppCompatActivity {
     public void obtenerDetalleArticulo(Articulo articulo){
 
         Intent intent = new Intent(ListaArticulosActivity.this, ArticuloDetalleActivity.class);
-        intent.putExtra("articulo", articulo);  // Asegúrate de que tu clase Articulo implemente Serializable o Parcelable
+        intent.putExtra("articulo", articulo);
+        intent.putExtra("comanda", comandaActiva);
         startActivity(intent);
     }
 

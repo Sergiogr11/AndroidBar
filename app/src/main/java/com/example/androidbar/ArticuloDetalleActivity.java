@@ -84,14 +84,14 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         btnAddArticulo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
                 int cantidadInt = Integer.parseInt(cantidad.getText().toString());
                 float precioTotal = articuloActivo.getPrecio() * cantidadInt;
                 LineaComanda lineaComanda = new LineaComanda();
                 lineaComanda.setArticuloId(articuloActivo.getArticuloId());
                 lineaComanda.setCantidad(Integer.parseInt(cantidad.getText().toString()));
                 lineaComanda.setPrecio(precioTotal);
-                */
+
+
             }
         });
     }

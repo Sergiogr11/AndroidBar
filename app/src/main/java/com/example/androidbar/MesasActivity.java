@@ -22,7 +22,9 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -170,40 +172,45 @@ public class MesasActivity extends AppCompatActivity {
 
     // Crear una nueva comanda cuando la mesa está libre
     private void crearNuevaComanda(Mesa mesa, Usuario usuario) {
-        // Creo un objeto LocalDateTime para la fecha y hora actuales
-        LocalDateTime now = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            now = LocalDateTime.now();
-        }
 
         // Realizo una llamada a mi API para obtener el ID de comanda máximo
         Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
-        LocalDateTime finalNow = now;
-        callMaxId.enqueue(new Callback<Integer>() {
-            @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                if (response.isSuccessful()) {
-                    int comandaId = response.body() + 1;
+            callMaxId.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int comandaId = response.body() + 1;
 
-                    comandaActiva = new Comanda();
-                    comandaActiva.setNumeroComanda(comandaId);
-                    comandaActiva.setPrecioTotal(0);
-                    comandaActiva.setFechaHoraApertura(finalNow);
-                    comandaActiva.setNumeroComensales(mesa.getCapacidad());
-                    comandaActiva.setUsuarioId(usuario.getUserId());
-                    comandaActiva.setMesaId(mesa.getMesaId());
+                        comandaActiva = new Comanda();
+                        comandaActiva.setNumeroComanda(comandaId);
+                        comandaActiva.setPrecioTotal(0);
+                        long millis = System.currentTimeMillis();
+                        comandaActiva.setFechaHoraApertura(millis);
+                        comandaActiva.setNumeroComensales(mesa.getCapacidad());
+                        comandaActiva.setUsuarioId(usuario.getUserId());
+                        comandaActiva.setMesaId(mesa.getMesaId());
 
-                    iniciarListaArticulosActivity();
-                } else {
-                    Toast.makeText(MesasActivity.this, "Error al obtener el máximo ID de comanda", Toast.LENGTH_SHORT).show();
+                        //Pongo la mesa en estado Ocupada
+                        mesa.setEstadoMesa("Ocupada");
+
+                        //Actualizo el estado de la mesa en la bbdd
+                        actualizarEstadoMesa(mesa);
+
+                        //Guardo la comanda nueva en la base de datos
+                        guardarComandaBd(comandaActiva);
+
+
+                        iniciarListaArticulosActivity();
+                    } else {
+                        Toast.makeText(MesasActivity.this, "Error al obtener el máximo ID de comanda", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
-                Toast.makeText(MesasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    Toast.makeText(MesasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
 
@@ -215,5 +222,39 @@ public class MesasActivity extends AppCompatActivity {
             intent.putExtra("comanda", comandaActiva);
         }
         startActivity(intent);
+    }
+
+    private void guardarComandaBd(Comanda comanda){
+        //Realizo la llamada a mi api para crear la comanda
+        Call<String> callcrearComanda = apiComandas.createComanda(comanda);
+        callcrearComanda.enqueue(new Callback<String>() {
+
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(MesasActivity.this, "Comanda creada correctamente", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(MesasActivity.this, "Error al crear comanda", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void actualizarEstadoMesa(Mesa mesa){
+        //Realizo la llamada a mi api para actualizar la mesa
+        Call <String> callupdateMesa = apiMesas.updateMesa(mesa);
+        callupdateMesa.enqueue(new Callback<String>() {
+
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(MesasActivity.this, "Mesa actualizada correctamente", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(MesasActivity.this, "Error al actualizar mesa", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
