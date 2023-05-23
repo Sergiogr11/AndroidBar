@@ -67,6 +67,9 @@ public class ListaArticulosActivity extends AppCompatActivity {
         mesaSeleccionada = (String) getIntent().getSerializableExtra("mesa");
         mesaActiva.setText("Mesa " + mesaSeleccionada);
 
+        // Obtener la Comanda Activa
+        comandaActiva = (Comanda) getIntent().getSerializableExtra("comanda");
+
         // Inicializar las listas de categorías y artículos
         categorias = new ArrayList<>();
         articulos = new ArrayList<>();
@@ -92,9 +95,6 @@ public class ListaArticulosActivity extends AppCompatActivity {
                     Articulo articuloSeleccionado = articulos.get(position);
                     obtenerDetalleArticulo(articuloSeleccionado);
                 }
-
-
-
             }
         });
 

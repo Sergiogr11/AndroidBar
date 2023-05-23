@@ -16,10 +16,11 @@
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintVertical_bias="0.002" />
 
     <EditText
         android:id="@+id/username"
@@ -31,24 +32,26 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LogoComandapp" />
+        app:layout_constraintTop_toBottomOf="@+id/LogoComandapp"
+        app:layout_constraintVertical_bias="0.046" />
 
     <Button
         android:id="@+id/iniciarSesion"
         android:layout_width="298dp"
         android:layout_height="67dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/button_rounded"
         android:text="Iniciar Sesión"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        android:background="@drawable/button_rounded"/>
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <ImageView
         android:id="@+id/LogoComandapp"

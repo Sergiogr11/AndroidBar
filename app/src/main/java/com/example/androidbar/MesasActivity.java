@@ -41,7 +41,6 @@ public class MesasActivity extends AppCompatActivity {
     private Usuario usuario;
     private String mesaSeleccionada;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,12 +105,38 @@ public class MesasActivity extends AppCompatActivity {
         Button button = new Button(this);
         button.setText(mesa.getNombreMesa());
 
+        float flexBasisPercent = 0.3f;
+
+        int buttonMarginInDp = 5;
+        int buttonHeightInDp = 100;
+
+        int buttonMarginInPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                buttonMarginInDp,
+                getResources().getDisplayMetrics()
+        );
+
+        int buttonHeightInPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                buttonHeightInDp,
+                getResources().getDisplayMetrics()
+        );
+
+        FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                buttonHeightInPx
+        );
+        params.setMargins(buttonMarginInPx, buttonMarginInPx, buttonMarginInPx, buttonMarginInPx);
+        params.setFlexBasisPercent(flexBasisPercent);
+        button.setLayoutParams(params);
+
         //Depenediendo del estado de la mesa cambio el color del boton
         if (mesa.getEstadoMesa().equals("Libre")) {
             button.setBackgroundColor(Color.parseColor("#00FF00"));
         } else if (mesa.getEstadoMesa().equals("Ocupada")) {
             button.setBackgroundColor(Color.parseColor("#CF0808"));
         }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,60 +146,41 @@ public class MesasActivity extends AppCompatActivity {
             }
         });
 
-        int buttonSizeInDp = 105;
-        int buttonMarginInDp = 5;
-        int buttonSizeInPx = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                buttonSizeInDp,
-                getResources().getDisplayMetrics()
-        );
-        int buttonMarginInPx = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                buttonMarginInDp,
-                getResources().getDisplayMetrics()
-        );
-
-        ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(buttonSizeInPx, buttonSizeInPx);
-        layoutParams.setMargins(buttonMarginInPx, buttonMarginInPx, buttonMarginInPx, buttonMarginInPx);
-        button.setLayoutParams(layoutParams);
-
-
         return button;
     }
 
     private void obtenerComandaMesa(Mesa mesa) {
-        //Obtengo la comanda asociada a la mesa, si la mesa esta ocupada
-        if (mesa.getEstadoMesa().equals("Ocupada")) {
-            //Realizo la llamada a mi api para encontrar las mesas de la posicion
-            Call<Comanda> call = apiComandas.findLastComandaByMesa(mesa.getMesaId());
-            call.enqueue(new Callback<Comanda>() {
-                @Override
-                public void onResponse(Call<Comanda> call, Response<Comanda> response) {
-                    if (response.isSuccessful()) {
-                        comandaActiva = response.body();
-                        // Iniciar la actividad de la lista de artículos con la comanda obtenida
-                        iniciarListaArticulosActivity();
-                    }else{
-                        Toast.makeText(MesasActivity.this, "Error al obtener comanda asociada ", Toast.LENGTH_SHORT).show();
+            //Obtengo la comanda asociada a la mesa, si la mesa esta ocupada
+            if (mesa.getEstadoMesa().equals("Ocupada")) {
+                //Realizo la llamada a mi api para encontrar las mesas de la posicion
+                Call<Comanda> call = apiComandas.findLastComandaByMesa(mesa.getMesaId());
+                call.enqueue(new Callback<Comanda>() {
+                    @Override
+                    public void onResponse(Call<Comanda> call, Response<Comanda> response) {
+                        if (response.isSuccessful()) {
+                            comandaActiva = response.body();
+                            // Iniciar la actividad de la lista de artículos con la comanda obtenida
+                            iniciarListaArticulosActivity();
+                        } else {
+                            Toast.makeText(MesasActivity.this, "Error al obtener comanda asociada ", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<Comanda> call, Throwable t) {
-                    Toast.makeText(MesasActivity.this, "No hay comanda asociada ", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            // Crear una nueva comanda si la mesa está libre
-            crearNuevaComanda(mesa, usuario);
-        }
+                    @Override
+                    public void onFailure(Call<Comanda> call, Throwable t) {
+                        Toast.makeText(MesasActivity.this, "No hay comanda asociada ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // Crear una nueva comanda si la mesa está libre
+                crearNuevaComanda(mesa, usuario);
+            }
     }
 
     // Crear una nueva comanda cuando la mesa está libre
     private void crearNuevaComanda(Mesa mesa, Usuario usuario) {
-
-        // Realizo una llamada a mi API para obtener el ID de comanda máximo
-        Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
+            // Realizo una llamada a mi API para obtener el ID de comanda máximo
+            Call<Integer> callMaxId = apiComandas.findMaxIdComanda();
             callMaxId.enqueue(new Callback<Integer>() {
                 @Override
                 public void onResponse(Call<Integer> call, Response<Integer> response) {
@@ -190,14 +196,9 @@ public class MesasActivity extends AppCompatActivity {
                         comandaActiva.setUsuarioId(usuario.getUserId());
                         comandaActiva.setMesaId(mesa.getMesaId());
 
-                        //Pongo la mesa en estado Ocupada
-                        mesa.setEstadoMesa("Ocupada");
-
-                        //Actualizo el estado de la mesa en la bbdd
-                        actualizarEstadoMesa(mesa);
 
                         //Guardo la comanda nueva en la base de datos
-                        guardarComandaBd(comandaActiva);
+                        guardarComandaBd(comandaActiva, mesa);
 
 
                         iniciarListaArticulosActivity();
@@ -224,37 +225,45 @@ public class MesasActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void guardarComandaBd(Comanda comanda){
-        //Realizo la llamada a mi api para crear la comanda
-        Call<String> callcrearComanda = apiComandas.createComanda(comanda);
-        callcrearComanda.enqueue(new Callback<String>() {
+    private void guardarComandaBd(Comanda comanda, Mesa mesa){
+            //Realizo la llamada a mi api para crear la comanda
+            Call<String> callcrearComanda = apiComandas.createComanda(comanda);
+            callcrearComanda.enqueue(new Callback<String>() {
 
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(MesasActivity.this, "Comanda creada correctamente", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Toast.makeText(MesasActivity.this, "Comanda creada correctamente", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(MesasActivity.this, "Error al crear comanda", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    //Pongo la mesa en estado Ocupada
+                    mesa.setEstadoMesa("Ocupada");
+
+
+                    //Actualizo el estado de la mesa en la bbdd
+                    // TODO FIX (Mirar como arreglar la concurrencia)
+                    //actualizarEstadoMesa(mesa);
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(MesasActivity.this, "Error al crear comanda", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
-    private void actualizarEstadoMesa(Mesa mesa){
-        //Realizo la llamada a mi api para actualizar la mesa
-        Call <String> callupdateMesa = apiMesas.updateMesa(mesa);
-        callupdateMesa.enqueue(new Callback<String>() {
+    private void actualizarEstadoMesa(Mesa mesa) {
+            //Realizo la llamada a mi api para actualizar la mesa
+            Call<String> callupdateMesa = apiMesas.updateMesa(mesa);
+            callupdateMesa.enqueue(new Callback<String>() {
 
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(MesasActivity.this, "Mesa actualizada correctamente", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Toast.makeText(MesasActivity.this, "Mesa actualizada correctamente", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(MesasActivity.this, "Error al actualizar mesa", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(MesasActivity.this, "Error al actualizar mesa", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
-}

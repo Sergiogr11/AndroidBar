@@ -56,7 +56,7 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         nombreArticulo.setText(articuloActivo.getNombreArticulo());
         descripcionArticulo.setText(articuloActivo.getDescripcionArticulo());
         precioArticulo.setText(String.valueOf(articuloActivo.getPrecio()));
-        cantidad.setText(0);
+        cantidad.setText(String.valueOf(0));
 
         //Añado listeners a los botones de aumentar y disminuir cantidad
         btnMasCantidad.setOnClickListener(new View.OnClickListener() {

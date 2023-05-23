@@ -29,6 +29,9 @@
         <activity
             android:name=".ListaArticulosActivity"
             android:exported="false" />
+        <activity
+            android:name=".ArticuloDetalleActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
