@@ -23,29 +23,15 @@
         android:id="@+id/btnEditar"
         android:layout_width="142dp"
         android:layout_height="73dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:background="@drawable/button_rounded"
-        android:text="Editar Comanda"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnRealizarPedido"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRealizarPedido"
-        android:layout_width="142dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/button_rounded"
-        android:text="Realizar Pedido"
+        android:text="Resumen
+         Comanda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnEditar" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.934" />
 
     <TextView
         android:id="@+id/mesaActiva"

@@ -32,7 +32,6 @@ public class ListaArticulosActivity extends AppCompatActivity {
 
     private ListView listViewArticulos;
     private Button btnEditar;
-    private Button btnRealizarPedido;
     private TextView mesaActiva;
 
 
@@ -60,7 +59,6 @@ public class ListaArticulosActivity extends AppCompatActivity {
         // Obtener referencias a los elementos de la interfaz de usuario
         listViewArticulos = findViewById(R.id.listViewArticulos);
         btnEditar = findViewById(R.id.btnEditar);
-        btnRealizarPedido = findViewById(R.id.btnRealizarPedido);
         mesaActiva = findViewById(R.id.mesaActiva);
 
         // Obtener la Mesa para setearla en la parte superior
@@ -98,33 +96,17 @@ public class ListaArticulosActivity extends AppCompatActivity {
             }
         });
 
-        // Configurar el listener para el botón "Editar Comanda"
+        //Si btnEditar se presiona se redirige a editar comanda
         btnEditar.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-            /*
-                // Implementar la lógica para el botón "Editar Comanda"
                 // Redirigir a la pantalla de edición de comanda
-                Intent intent = new Intent(MainActivity.this, EditarComandaActivity.class);
+                Intent intent = new Intent(ListaArticulosActivity.this, EditarComandaActivity.class);
+                intent.putExtra("comanda", comandaActiva);
                 startActivity(intent);
-            */
             }
         });
 
-        // Configurar el listener para el botón "Realizar Pedido"
-        btnRealizarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                // Implementar la lógica para el botón "Realizar Pedido"
-                // Redirigir a la pantalla de realización de pedido
-                Intent intent = new Intent(MainActivity.this, RealizarPedidoActivity.class);
-                startActivity(intent);
-                 */
-            }
-
-        });
     }
 
     private void cargarCategorias() {
