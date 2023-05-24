@@ -168,6 +168,7 @@ public class ListaArticulosActivity extends AppCompatActivity {
 
         Intent intent = new Intent(ListaArticulosActivity.this, ArticuloDetalleActivity.class);
         intent.putExtra("articulo", articulo);
+        intent.putExtra("mesa", mesaSeleccionada);
         intent.putExtra("comanda", comandaActiva);
         startActivity(intent);
     }

@@ -42,6 +42,7 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
 
     private Articulo articuloActivo;
     private Comanda comandaActiva;
+    private String mesaSeleccionada;
 
 
     @Override
@@ -65,12 +66,13 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         // Obtener el Articulo correspondiente
         articuloActivo = (Articulo) getIntent().getSerializableExtra("articulo");
         comandaActiva = (Comanda) getIntent().getSerializableExtra("comanda");
+        mesaSeleccionada = (String) getIntent().getSerializableExtra("mesa");
 
         //Seteo los campos con la información del artículo
         nombreArticulo.setText(articuloActivo.getNombreArticulo());
         descripcionArticulo.setText(articuloActivo.getDescripcionArticulo());
         precioArticulo.setText(String.valueOf(articuloActivo.getPrecio()));
-        cantidad.setText(String.valueOf(0));
+        cantidad.setText(String.valueOf(1));
 
         //Añado listeners a los botones de aumentar y disminuir cantidad
         btnMasCantidad.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +88,9 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int cantidadActual = Integer.parseInt(cantidad.getText().toString());
-                if(cantidadActual > 0) { // Only decrease if quantity is more than 0
-                    cantidadActual--; // Decrease the quantity
-                    cantidad.setText(String.valueOf(cantidadActual)); // Update the text view
+                if(cantidadActual > 1) { // Decrementa si es mayor de 1
+                    cantidadActual--;
+                    cantidad.setText(String.valueOf(cantidadActual)); // Actualizo el textview
                 }
             }
         });
@@ -115,6 +117,8 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                 lineaComanda.setPrecio(precioTotal);
 
                 guardarLineaComanda(lineaComanda);
+
+                volverListaArticulos();
             }
         });
     }
@@ -162,5 +166,13 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                 Toast.makeText(ArticuloDetalleActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void volverListaArticulos(){
+        Intent intent = new Intent(ArticuloDetalleActivity.this, ListaArticulosActivity.class);
+        intent.putExtra("articulo", articuloActivo);
+        intent.putExtra("mesa", mesaSeleccionada);
+        intent.putExtra("comanda", comandaActiva);
+        startActivity(intent);
     }
 }
