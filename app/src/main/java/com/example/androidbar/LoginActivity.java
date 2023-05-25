@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 // Ocurrió un error en la solicitud
                                                 Toast.makeText(LoginActivity.this, "Error al obtener usuario", Toast.LENGTH_SHORT).show();
                                             }
+                                            return null;
                                         }
 
                                         @Override
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
                             }
 
+                        return null;
                     }
 
                     @Override
