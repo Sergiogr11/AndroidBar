@@ -82,7 +82,6 @@ public class MesasActivity extends AppCompatActivity {
                     List<Mesa> mesas = response.body();
                     actualizarUI(mesas);
                 }
-                return null;
             }
 
             @Override
@@ -165,7 +164,6 @@ public class MesasActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(MesasActivity.this, "Error al obtener comanda asociada ", Toast.LENGTH_SHORT).show();
                         }
-                        return null;
                     }
 
                     @Override
@@ -207,7 +205,6 @@ public class MesasActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(MesasActivity.this, "Error al obtener el máximo ID de comanda", Toast.LENGTH_SHORT).show();
                     }
-                    return null;
                 }
 
                 @Override
@@ -244,7 +241,6 @@ public class MesasActivity extends AppCompatActivity {
                     //Actualizo el estado de la mesa en la bbdd
                     // TODO FIX (Mirar como arreglar la concurrencia)
                     //actualizarEstadoMesa(mesa);
-                    return null;
                 }
 
                 @Override
@@ -262,7 +258,6 @@ public class MesasActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Toast.makeText(MesasActivity.this, "Mesa actualizada correctamente", Toast.LENGTH_SHORT).show();
-                    return null;
                 }
 
                 @Override
