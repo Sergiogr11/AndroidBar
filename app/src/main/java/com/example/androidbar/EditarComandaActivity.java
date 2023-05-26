@@ -19,6 +19,7 @@ import com.example.androidbar.model.LineaComandaDTO;
 import com.example.androidbar.network.ApiArticulos;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiComandas;
+import com.example.androidbar.network.ApiImpresora;
 import com.example.androidbar.network.ApiLineaComanda;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class EditarComandaActivity extends AppCompatActivity {
     private ApiLineaComanda apiLineaComanda;
     private ApiComandas apiComandas;
     private ApiArticulos apiArticulos;
+    private ApiImpresora apiImpresora;
 
     private Button btnCrear;
     private RecyclerView recyclerViewComanda;
@@ -65,7 +67,7 @@ public class EditarComandaActivity extends AppCompatActivity {
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Enviar comanda a ImprimirController
+                imprimirBebidayComida();
             }
         });
 
@@ -157,5 +159,23 @@ public class EditarComandaActivity extends AppCompatActivity {
         intent.putExtra("lineaComanda", lineaComanda);
         intent.putExtra("articulo", articulo);
         startActivity(intent);
+    }
+
+    private void imprimirBebidayComida(){
+        apiImpresora.imprimirBebidayComida(comandaActiva).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(EditarComandaActivity.this, "Comanda Enviada Correctamente", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EditarComandaActivity.this, "Error al enviar comanda", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
