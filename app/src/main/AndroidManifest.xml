@@ -15,9 +15,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MesasActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -27,11 +24,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MesasActivity"
+            android:exported="false" />
+        <activity
             android:name=".ListaArticulosActivity"
             android:exported="false" />
         <activity
             android:name=".ArticuloDetalleActivity"
             android:exported="false" />
+        <activity
+            android:name=".EditarComandaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditarArticuloDetalleActivity"
+            android:exported="false" />
+
     </application>
+
 
 </manifest>

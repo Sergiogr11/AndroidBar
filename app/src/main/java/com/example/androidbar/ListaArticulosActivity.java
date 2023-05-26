@@ -166,7 +166,6 @@ public class ListaArticulosActivity extends AppCompatActivity {
     }
 
     public void obtenerDetalleArticulo(Articulo articulo){
-
         Intent intent = new Intent(ListaArticulosActivity.this, ArticuloDetalleActivity.class);
         intent.putExtra("articulo", articulo);
         intent.putExtra("mesa", mesaSeleccionada);

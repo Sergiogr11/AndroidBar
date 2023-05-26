@@ -12,7 +12,6 @@ import retrofit2.http.PUT;
 
 public interface ApiMesas {
 
-
     @POST("/findMesasByPosicion")
     Call<List<Mesa>> findMesasByPosicion(@Body RequestBody posicion);
 

@@ -85,38 +85,12 @@ public class EditarComandaActivity extends AppCompatActivity {
                             // Obtener el id del elemento a editar
                             LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
                             LineaComanda lineaComandaSeleccionada = lineaComandaDTO.getLineaComanda();
-                            Articulo articulo = obtenerArticulo(lineaComandaSeleccionada);
-                            Intent intent = new Intent(EditarComandaActivity.this, EditarArticuloDetalleActivity.class);
-                            intent.putExtra("lineaComanda", lineaComandaSeleccionada);
-                            intent.putExtra("articulo", articulo);
-                            startActivity(intent);
-
+                            obtenerArticulo(lineaComandaSeleccionada);
                         }
 
                         @Override
                         public void onDeleteClick(int position) {
-                            // Obtener el id del elemento a eliminar
-                            LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
-
-                            // Hacer una llamada a la API para eliminar el elemento de la base de datos
-                            apiLineaComanda.deleteLineaComanda(lineaComandaDTO.getLineaComanda()).enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    // Eliminar el elemento de la lista de la aplicación si la eliminación fue exitosa
-                                    if(response.isSuccessful()) {
-                                        lineaComandaList.remove(position);
-                                        recyclerViewComanda.getAdapter().notifyItemRemoved(position);
-                                    } else {
-                                        Toast.makeText(EditarComandaActivity.this, "Error al borrar la linea de Comanda", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
+                            borrarLineaComanda(position);
                         }
                     }));
                 }
@@ -129,13 +103,14 @@ public class EditarComandaActivity extends AppCompatActivity {
         });
     }
 
-    private Articulo obtenerArticulo(LineaComanda lineaComanda){
-        final Articulo[] articulo = new Articulo[1];
-        apiArticulos.findArticulo(lineaComanda.getArticuloId()).enqueue(new Callback<Articulo>() {
+    private void obtenerArticulo(LineaComanda lineaComanda){
+        int articuloId = lineaComanda.getArticuloId();
+        apiArticulos.findArticulo(articuloId).enqueue(new Callback<Articulo>() {
             @Override
             public void onResponse(Call<Articulo> call, Response<Articulo> response) {
                 if(response.isSuccessful()) {
-                    articulo[0] = response.body();
+                    Articulo articulo = response.body();
+                    editarLineaComanda(articulo, lineaComanda);
                 } else {
                     Toast.makeText(EditarComandaActivity.this, "Error al obtener articulo", Toast.LENGTH_SHORT).show();
                 }
@@ -146,7 +121,41 @@ public class EditarComandaActivity extends AppCompatActivity {
                 Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
             }
         });
-        return articulo[0];
     }
 
+    private void borrarLineaComanda(int position){
+        // Obtener el id del elemento a eliminar
+        LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
+
+        //Obtener la linea comanda a eliminar
+        LineaComanda lineaComandaAEliminar = lineaComandaDTO.getLineaComanda();
+
+        // Hacer una llamada a la API para eliminar el elemento de la base de datos
+
+        apiLineaComanda.deleteLineaComanda(lineaComandaAEliminar).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Eliminar el elemento de la lista de la aplicación si la eliminación fue exitosa
+                if(response.isSuccessful()) {
+                    lineaComandaList.remove(position);
+                    recyclerViewComanda.getAdapter().notifyItemRemoved(position);
+                } else {
+                    Toast.makeText(EditarComandaActivity.this, "Error al borrar la linea de Comanda", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void editarLineaComanda(Articulo articulo, LineaComanda lineaComanda){
+        Intent intent = new Intent(EditarComandaActivity.this, EditarArticuloDetalleActivity.class);
+        intent.putExtra("comanda", comandaActiva);
+        intent.putExtra("lineaComanda", lineaComanda);
+        intent.putExtra("articulo", articulo);
+        startActivity(intent);
+    }
 }

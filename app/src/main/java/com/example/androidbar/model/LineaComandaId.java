@@ -1,6 +1,8 @@
 package com.example.androidbar.model;
 
-public class LineaComandaId {
+import java.io.Serializable;
+
+public class LineaComandaId implements Serializable {
 
     private int numeroLinea;
     private int numeroComanda;

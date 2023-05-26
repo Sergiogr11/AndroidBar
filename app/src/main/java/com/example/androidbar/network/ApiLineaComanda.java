@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -24,7 +25,7 @@ public interface ApiLineaComanda {
     @PUT("/updateLineaComanda")
     Call<ResponseBody> updateLineaComanda(@Body LineaComanda lineaComanda);
 
-    @DELETE("/deleteLineaComanda")
+    @HTTP(method = "DELETE", path = "/deleteLineaComanda", hasBody = true)
     Call<ResponseBody> deleteLineaComanda(@Body LineaComanda lineaComanda);
 
     @GET("/findLastLineaComanda")
@@ -33,7 +34,7 @@ public interface ApiLineaComanda {
     @GET("/findAllByNumeroComanda")
     Call<List<LineaComanda>> findAllByNumeroComanda(@Body Integer comandaId);
 
-    @GET("findAllWithNombreArticulo")
+    @POST("findAllWithNombreArticulo")
     Call<List<LineaComandaDTO>> findAllWithNombreArticulo(@Body Integer comandaId);
 
 }

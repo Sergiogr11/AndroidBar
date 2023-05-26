@@ -1,6 +1,8 @@
 package com.example.androidbar.model;
 
-public class LineaComandaDTO {
+import java.io.Serializable;
+
+public class LineaComandaDTO implements Serializable {
 
     public final LineaComanda lineaComanda;
     public final String nombreArticulo;

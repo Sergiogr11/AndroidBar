@@ -41,6 +41,7 @@ public class EditarArticuloDetalleActivity extends AppCompatActivity {
 
     private Articulo articuloActivo;
     private LineaComanda lineaComandaActiva;
+    private Comanda comandaActiva;
 
 
 
@@ -64,13 +65,14 @@ public class EditarArticuloDetalleActivity extends AppCompatActivity {
 
         // Obtener el Articulo correspondiente
         articuloActivo = (Articulo) getIntent().getSerializableExtra("articulo");
+        comandaActiva = (Comanda) getIntent().getSerializableExtra("comanda");
         lineaComandaActiva = (LineaComanda) getIntent().getSerializableExtra("lineaComanda");
 
         //Seteo los campos con la información del artículo
         nombreArticulo.setText(articuloActivo.getNombreArticulo());
         descripcionArticulo.setText(articuloActivo.getDescripcionArticulo());
         precioArticulo.setText(String.valueOf(articuloActivo.getPrecio()));
-        cantidad.setText(lineaComandaActiva.getCantidad());
+        cantidad.setText(String.valueOf(lineaComandaActiva.getCantidad()));
 
         //Añado listeners a los botones de aumentar y disminuir cantidad
         btnMasCantidad.setOnClickListener(new View.OnClickListener() {
@@ -102,15 +104,11 @@ public class EditarArticuloDetalleActivity extends AppCompatActivity {
                 int cantidadInt = Integer.parseInt(cantidad.getText().toString());
                 float precioTotal = articuloActivo.getPrecio() * cantidadInt;
 
-                //Creo la linea de comanda y la guardo en la bbdd
-                LineaComanda lineaComanda = new LineaComanda();
-                lineaComanda.setLineaComandaId(lineaComandaActiva.getLineaComandaId());
-                lineaComanda.setCantidad(Integer.parseInt(cantidad.getText().toString()));
-                lineaComanda.setPrecio(precioTotal);
+                lineaComandaActiva.setCantidad(Integer.parseInt(cantidad.getText().toString()));
+                lineaComandaActiva.setPrecio(precioTotal);
 
-                guardarLineaComanda(lineaComanda);
+                guardarLineaComanda(lineaComandaActiva);
 
-                volverEditarComanda();
             }
         });
     }
@@ -123,7 +121,8 @@ public class EditarArticuloDetalleActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    //Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda actualizada correctamente ", Toast.LENGTH_SHORT).show();
+                    volverEditarComanda();
+                    //Toast.makeText(EditarArticuloDetalleActivity.this, "Linea Comanda actualizada correctamente ", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(EditarArticuloDetalleActivity.this, "Error al actualizar linea de comanda", Toast.LENGTH_SHORT).show();
                 }
@@ -138,7 +137,8 @@ public class EditarArticuloDetalleActivity extends AppCompatActivity {
     }
 
     private void volverEditarComanda(){
-        Intent intent = new Intent(EditarArticuloDetalleActivity.this, ListaArticulosActivity.class);
+        Intent intent = new Intent(EditarArticuloDetalleActivity.this, EditarComandaActivity.class);
+        intent.putExtra("comanda", comandaActiva);
         startActivity(intent);
     }
 }
