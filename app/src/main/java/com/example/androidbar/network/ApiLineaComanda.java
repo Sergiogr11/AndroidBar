@@ -6,6 +6,7 @@ import com.example.androidbar.model.LineaComandaDTO;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -18,7 +19,7 @@ import retrofit2.http.Query;
 public interface ApiLineaComanda {
 
     @POST("/createLineaComanda")
-    Call<String> createLineaComanda(@Body LineaComanda lineaComanda);
+    Call<ResponseBody> createLineaComanda(@Body LineaComanda lineaComanda);
 
     @PUT("/updateLineaComanda")
     Call<String> updateLineaComanda(@Body LineaComanda lineaComanda);

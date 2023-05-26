@@ -10,21 +10,20 @@
         android:layout_width="114dp"
         android:layout_height="51dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="143dp"
         android:layout_marginEnd="127dp"
-        android:layout_marginBottom="68dp"
         android:background="@drawable/button_rounded"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btnAddArticulo"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cantidad"
-        app:layout_constraintTop_toBottomOf="@+id/descripcionArticulo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.945"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <TextView
         android:id="@+id/nombreArticulo"
-        android:layout_width="155dp"
-        android:layout_height="70dp"
+        android:layout_width="179dp"
+        android:layout_height="96dp"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,9 +35,9 @@
 
     <TextView
         android:id="@+id/precioArticulo"
-        android:layout_width="113dp"
-        android:layout_height="65dp"
-        android:textSize="24sp"
+        android:layout_width="48dp"
+        android:layout_height="47dp"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.832"
@@ -49,16 +48,15 @@
     <TextView
         android:layout_width="144dp"
         android:layout_height="30dp"
-        android:layout_marginTop="100dp"
         android:text="Descripción:"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/descripcionArticulo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombreArticulo"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.388" />
 
     <TextView
         android:id="@+id/descripcionArticulo"
@@ -67,10 +65,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintHorizontal_bias="0.387"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.539" />
+        app:layout_constraintVertical_bias="0.578" />
 
     <Button
         android:id="@+id/btnAddArticulo"
@@ -80,15 +78,15 @@
         android:text="Añadir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.83"
+        app:layout_constraintHorizontal_bias="0.836"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descripcionArticulo"
-        app:layout_constraintVertical_bias="0.528" />
+        app:layout_constraintVertical_bias="0.649" />
 
     <TextView
         android:id="@+id/cantidad"
-        android:layout_width="44dp"
-        android:layout_height="65dp"
+        android:layout_width="46dp"
+        android:layout_height="77dp"
         android:layout_marginTop="95dp"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -103,14 +101,26 @@
         android:layout_width="113dp"
         android:layout_height="51dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="82dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/button_rounded"
-        app:layout_constraintBottom_toTopOf="@+id/btnMenosCantidad"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnAddArticulo"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cantidad"
-        app:layout_constraintTop_toBottomOf="@+id/descripcionArticulo"
-        app:layout_constraintVertical_bias="0.136"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.847"
         app:srcCompat="@android:drawable/arrow_up_float" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="19dp"
+        android:layout_height="46dp"
+        android:text="€"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.892"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.227" />
 </androidx.constraintlayout.widget.ConstraintLayout>

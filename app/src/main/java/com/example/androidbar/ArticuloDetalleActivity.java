@@ -21,6 +21,7 @@ import com.example.androidbar.network.ApiCategorias;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiLineaComanda;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -123,11 +124,12 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
     }
 
     private void guardarLineaComanda(LineaComanda lineaComanda){
-        Call<String> crearlineaComandaCall = apiLineaComanda.createLineaComanda(lineaComanda);
+        Call<ResponseBody> crearlineaComandaCall = apiLineaComanda.createLineaComanda(lineaComanda);
 
-        crearlineaComandaCall.enqueue(new Callback<String>() {
+
+        crearlineaComandaCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     //Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda creada correctamente ", Toast.LENGTH_SHORT).show();
                 } else {
@@ -136,7 +138,7 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 // Ocurrió un error en la comunicación con el servidor
                 Toast.makeText(ArticuloDetalleActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
             }
