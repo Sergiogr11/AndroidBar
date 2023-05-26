@@ -15,9 +15,7 @@ import com.example.androidbar.model.Articulo;
 import com.example.androidbar.model.Comanda;
 import com.example.androidbar.model.LineaComanda;
 import com.example.androidbar.model.LineaComandaId;
-import com.example.androidbar.model.Usuario;
 import com.example.androidbar.network.ApiArticulos;
-import com.example.androidbar.network.ApiCategorias;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiLineaComanda;
 
@@ -25,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ArticuloDetalleActivity extends AppCompatActivity {
+public class EditarArticuloDetalleActivity extends AppCompatActivity {
 
     private ApiArticulos apiArticulos;
     private ApiLineaComanda apiLineaComanda;
@@ -41,14 +39,14 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
     private Button btnAddArticulo;
 
     private Articulo articuloActivo;
-    private Comanda comandaActiva;
-    private String mesaSeleccionada;
+    private LineaComanda lineaComandaActiva;
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalle_articulos);
+        setContentView(R.layout.activity_editar_detalle_articulos);
 
         //Inicializo la api de articulos de retrofit
         apiArticulos = ApiClient.getClient().create(ApiArticulos.class);
@@ -65,14 +63,13 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
 
         // Obtener el Articulo correspondiente
         articuloActivo = (Articulo) getIntent().getSerializableExtra("articulo");
-        comandaActiva = (Comanda) getIntent().getSerializableExtra("comanda");
-        mesaSeleccionada = (String) getIntent().getSerializableExtra("mesa");
+        lineaComandaActiva = (LineaComanda) getIntent().getSerializableExtra("lineaComanda");
 
         //Seteo los campos con la información del artículo
         nombreArticulo.setText(articuloActivo.getNombreArticulo());
         descripcionArticulo.setText(articuloActivo.getDescripcionArticulo());
         precioArticulo.setText(String.valueOf(articuloActivo.getPrecio()));
-        cantidad.setText(String.valueOf(1));
+        cantidad.setText(lineaComandaActiva.getCantidad());
 
         //Añado listeners a los botones de aumentar y disminuir cantidad
         btnMasCantidad.setOnClickListener(new View.OnClickListener() {
@@ -104,50 +101,43 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                 int cantidadInt = Integer.parseInt(cantidad.getText().toString());
                 float precioTotal = articuloActivo.getPrecio() * cantidadInt;
 
-                //Creo el id para la linea de comanda
-                LineaComandaId lineaComandaId = new LineaComandaId();
-                lineaComandaId.setNumeroComanda(comandaActiva.getNumeroComanda());
-
                 //Creo la linea de comanda y la guardo en la bbdd
                 LineaComanda lineaComanda = new LineaComanda();
-                lineaComanda.setLineaComandaId(lineaComandaId);
-                lineaComanda.setArticuloId(articuloActivo.getArticuloId());
+                lineaComanda.setLineaComandaId(lineaComandaActiva.getLineaComandaId());
                 lineaComanda.setCantidad(Integer.parseInt(cantidad.getText().toString()));
                 lineaComanda.setPrecio(precioTotal);
 
                 guardarLineaComanda(lineaComanda);
 
-                volverListaArticulos();
+                volverEditarComanda();
             }
         });
     }
 
-    private void guardarLineaComanda(LineaComanda lineaComanda){
-        Call<String> crearlineaComandaCall = apiLineaComanda.createLineaComanda(lineaComanda);
 
-        crearlineaComandaCall.enqueue(new Callback<String>() {
+    private void guardarLineaComanda(LineaComanda lineaComanda){
+        Call<String> updateLineaComandaCall = apiLineaComanda.updateLineaComanda(lineaComanda);
+
+        updateLineaComandaCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    //Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda creada correctamente ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda actualizada correctamente ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ArticuloDetalleActivity.this, "Error al crear comanda", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarArticuloDetalleActivity.this, "Error al actualizar linea de comanda", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 // Ocurrió un error en la comunicación con el servidor
-                Toast.makeText(ArticuloDetalleActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditarArticuloDetalleActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void volverListaArticulos(){
-        Intent intent = new Intent(ArticuloDetalleActivity.this, ListaArticulosActivity.class);
-        intent.putExtra("articulo", articuloActivo);
-        intent.putExtra("mesa", mesaSeleccionada);
-        intent.putExtra("comanda", comandaActiva);
+    private void volverEditarComanda(){
+        Intent intent = new Intent(EditarArticuloDetalleActivity.this, ListaArticulosActivity.class);
         startActivity(intent);
     }
 }

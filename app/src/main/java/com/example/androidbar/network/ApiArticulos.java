@@ -18,4 +18,7 @@ public interface ApiArticulos  {
     Call<List<Articulo>> findArticulosbyCategoria(@Path("categoriaId") int categoriaId);
 
 
+    @GET("findArticulo")
+    Call<Articulo> findArticulo(@Path("articuloId") int articuloId);
+
 }

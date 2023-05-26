@@ -1,6 +1,8 @@
 package com.example.androidbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidbar.model.Articulo;
 import com.example.androidbar.model.Categoria;
 import com.example.androidbar.model.Comanda;
 import com.example.androidbar.model.LineaComanda;
@@ -31,7 +34,6 @@ public class EditarComandaActivity extends AppCompatActivity {
     private ApiComandas apiComandas;
     private ApiArticulos apiArticulos;
 
-    private Button btnEliminar;
     private Button btnCrear;
     private RecyclerView recyclerViewComanda;
 
@@ -49,7 +51,6 @@ public class EditarComandaActivity extends AppCompatActivity {
         apiArticulos = ApiClient.getClient().create(ApiArticulos.class);
 
         // Obtener referencias a los elementos de la interfaz de usuario
-        btnEliminar = findViewById(R.id.btnEliminar);
         btnCrear = findViewById(R.id.btnCrear);
         recyclerViewComanda = findViewById(R.id.recyclerViewComanda);
 
@@ -58,6 +59,15 @@ public class EditarComandaActivity extends AppCompatActivity {
 
         //Obtener las lineasComanda correspondientes a la Comanda Activa
         obtenerLineasComanda(comandaActiva);
+
+        //Añado funcionalidad a boton Crear Comanda
+        btnCrear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Enviar comanda a ImprimirController
+            }
+        });
+
     }
 
     private void obtenerLineasComanda(Comanda comandaActiva){
@@ -71,12 +81,41 @@ public class EditarComandaActivity extends AppCompatActivity {
                     recyclerViewComanda.setAdapter(new LineaComandaAdapter(lineaComandaList, new LineaComandaAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
-                            // Aquí puedes manejar la lógica para abrir la otra pantalla
+                            // Obtener el id del elemento a editar
+                            LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
+                            LineaComanda lineaComandaSeleccionada = lineaComandaDTO.getLineaComanda();
+                            Articulo articulo = obtenerArticulo(lineaComandaSeleccionada);
+                            Intent intent = new Intent(EditarComandaActivity.this, EditarArticuloDetalleActivity.class);
+                            intent.putExtra("lineaComanda", lineaComandaSeleccionada);
+                            intent.putExtra("articulo", articulo);
+                            startActivity(intent);
+
                         }
 
                         @Override
                         public void onDeleteClick(int position) {
-                           borrarLineaComanda();
+                            // Obtener el id del elemento a eliminar
+                            LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
+
+                            // Hacer una llamada a la API para eliminar el elemento de la base de datos
+                            apiLineaComanda.deleteLineaComanda(lineaComandaDTO.getLineaComanda()).enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    // Eliminar el elemento de la lista de la aplicación si la eliminación fue exitosa
+                                    if(response.isSuccessful()) {
+                                        lineaComandaList.remove(position);
+                                        recyclerViewComanda.getAdapter().notifyItemRemoved(position);
+                                    } else {
+                                        Toast.makeText(EditarComandaActivity.this, "Error al borrar la linea de Comanda", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         }
                     }));
                 }
@@ -89,8 +128,24 @@ public class EditarComandaActivity extends AppCompatActivity {
         });
     }
 
-    private void borrarLineaComanda(){
+    private Articulo obtenerArticulo(LineaComanda lineaComanda){
+        final Articulo[] articulo = new Articulo[1];
+        apiArticulos.findArticulo(lineaComanda.getArticuloId()).enqueue(new Callback<Articulo>() {
+            @Override
+            public void onResponse(Call<Articulo> call, Response<Articulo> response) {
+                if(response.isSuccessful()) {
+                    articulo[0] = response.body();
+                } else {
+                    Toast.makeText(EditarComandaActivity.this, "Error al obtener articulo", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Articulo> call, Throwable t) {
+                Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return articulo[0];
     }
 
 }

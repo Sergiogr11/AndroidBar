@@ -7,19 +7,21 @@ import java.util.List;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiComandas {
     @POST("/findLastComandaByMesa")
-    Call<Comanda> findLastComandaByMesa(@Field("mesaId") int mesaId);
+    Call<Comanda> findLastComandaByMesa(@Body int mesaId);
 
     @GET("/findMaxIdComanda")
     Call<Integer> findMaxIdComanda();
 
     @POST("/createComanda")
-    Call<String> createComanda(@Body Comanda comanda);
+    Call<ResponseBody> createComanda(@Body Comanda comanda);
 }

@@ -1,6 +1,8 @@
 package com.example.androidbar.model;
 
-public class Mesa {
+import java.io.Serializable;
+
+public class Mesa implements Serializable {
 
     private int mesaId;
     private String posicion;

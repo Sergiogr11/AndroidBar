@@ -17,21 +17,6 @@
         app:layout_constraintVertical_bias="0.22" />
 
     <Button
-        android:id="@+id/btnEliminar"
-        android:layout_width="128dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/button_rounded"
-        android:text="Eliminar Comanda"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewComanda"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
         android:id="@+id/btnCrear"
         android:layout_width="128dp"
         android:layout_height="62dp"
@@ -41,8 +26,8 @@
         android:text="Crear Comanda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.837"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewComanda"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

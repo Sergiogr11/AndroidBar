@@ -2,7 +2,9 @@ package com.example.androidbar.model;
 
 import androidx.annotation.NonNull;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable {
 
     private int categoriaId;
     private String nombreCategoria;

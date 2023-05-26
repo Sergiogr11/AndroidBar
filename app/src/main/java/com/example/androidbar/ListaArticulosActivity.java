@@ -102,6 +102,7 @@ public class ListaArticulosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Redirigir a la pantalla de edición de comanda
                 Intent intent = new Intent(ListaArticulosActivity.this, EditarComandaActivity.class);
+                intent.putExtra("mesa", mesaSeleccionada);
                 intent.putExtra("comanda", comandaActiva);
                 startActivity(intent);
             }
