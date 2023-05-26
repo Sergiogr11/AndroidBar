@@ -23,6 +23,7 @@ import com.example.androidbar.network.ApiLineaComanda;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,9 +99,9 @@ public class EditarComandaActivity extends AppCompatActivity {
                             LineaComandaDTO lineaComandaDTO = lineaComandaList.get(position);
 
                             // Hacer una llamada a la API para eliminar el elemento de la base de datos
-                            apiLineaComanda.deleteLineaComanda(lineaComandaDTO.getLineaComanda()).enqueue(new Callback<String>() {
+                            apiLineaComanda.deleteLineaComanda(lineaComandaDTO.getLineaComanda()).enqueue(new Callback<ResponseBody>() {
                                 @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     // Eliminar el elemento de la lista de la aplicación si la eliminación fue exitosa
                                     if(response.isSuccessful()) {
                                         lineaComandaList.remove(position);
@@ -111,7 +112,7 @@ public class EditarComandaActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onFailure(Call<String> call, Throwable t) {
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
                                 }
                             });

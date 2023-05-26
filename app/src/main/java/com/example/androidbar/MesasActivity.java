@@ -194,7 +194,7 @@ public class MesasActivity extends AppCompatActivity {
         //Guardo la comanda nueva en la base de datos
         guardarComandaBd(comandaActiva, mesa);
 
-        //iniciarListaArticulosActivity();
+        iniciarListaArticulosActivity();
     }
 
 

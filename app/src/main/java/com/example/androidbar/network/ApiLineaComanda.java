@@ -22,10 +22,10 @@ public interface ApiLineaComanda {
     Call<ResponseBody> createLineaComanda(@Body LineaComanda lineaComanda);
 
     @PUT("/updateLineaComanda")
-    Call<String> updateLineaComanda(@Body LineaComanda lineaComanda);
+    Call<ResponseBody> updateLineaComanda(@Body LineaComanda lineaComanda);
 
     @DELETE("/deleteLineaComanda")
-    Call<String> deleteLineaComanda(@Body LineaComanda lineaComanda);
+    Call<ResponseBody> deleteLineaComanda(@Body LineaComanda lineaComanda);
 
     @GET("/findLastLineaComanda")
     Call<Integer> findLastLineaComanda(@Body Integer comandaId);

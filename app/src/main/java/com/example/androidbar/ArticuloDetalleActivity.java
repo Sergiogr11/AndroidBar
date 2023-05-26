@@ -117,8 +117,6 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                 lineaComanda.setPrecio(precioTotal);
 
                 guardarLineaComanda(lineaComanda);
-
-                volverListaArticulos();
             }
         });
     }
@@ -131,7 +129,8 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    //Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda creada correctamente ", Toast.LENGTH_SHORT).show();
+                    volverListaArticulos();
+                    Toast.makeText(ArticuloDetalleActivity.this, "Linea Comanda creada correctamente ", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ArticuloDetalleActivity.this, "Error al crear comanda", Toast.LENGTH_SHORT).show();
                 }
