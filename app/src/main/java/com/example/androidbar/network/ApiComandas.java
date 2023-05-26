@@ -13,11 +13,12 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiComandas {
-    @POST("/findLastComandaByMesa")
-    Call<Comanda> findLastComandaByMesa(@Body int mesaId);
+    @GET("/findLastComandaByMesa/{mesaId}")
+    Call<Comanda> findLastComandaByMesa(@Path("mesaId") int mesaId);
 
     @GET("/findMaxIdComanda")
     Call<Integer> findMaxIdComanda();

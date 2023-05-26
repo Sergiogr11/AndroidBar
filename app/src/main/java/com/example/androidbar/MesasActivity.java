@@ -156,7 +156,8 @@ public class MesasActivity extends AppCompatActivity {
             //Obtengo la comanda asociada a la mesa, si la mesa esta ocupada
             if (mesa.getEstadoMesa().equals("Ocupada")) {
                 //Realizo la llamada a mi api para encontrar las mesas de la posicion
-                Call<Comanda> call = apiComandas.findLastComandaByMesa(mesa.getMesaId());
+                int mesaId = mesa.getMesaId();
+                Call<Comanda> call = apiComandas.findLastComandaByMesa(mesaId);
                 call.enqueue(new Callback<Comanda>() {
                     @Override
                     public void onResponse(Call<Comanda> call, Response<Comanda> response) {
