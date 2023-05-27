@@ -52,8 +52,8 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_articulos);
 
         //Inicializo la api de articulos de retrofit
-        apiArticulos = ApiClient.getClient().create(ApiArticulos.class);
-        apiLineaComanda = ApiClient.getClient().create(ApiLineaComanda.class);
+        apiArticulos = ApiClient.getClient(ArticuloDetalleActivity.this).create(ApiArticulos.class);
+        apiLineaComanda = ApiClient.getClient(ArticuloDetalleActivity.this).create(ApiLineaComanda.class);
 
         // Obtener referencias a los elementos de la interfaz de usuario
         nombreArticulo = findViewById(R.id.nombreArticulo);

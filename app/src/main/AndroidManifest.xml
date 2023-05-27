@@ -38,6 +38,9 @@
         <activity
             android:name=".EditarArticuloDetalleActivity"
             android:exported="false" />
+        <activity
+            android:name=".ConfiguracionActivity"
+            android:exported="false" />
 
     </application>
 

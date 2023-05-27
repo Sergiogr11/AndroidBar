@@ -49,9 +49,9 @@ public class EditarComandaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_comanda);
 
         //Inicializo la api de comandas y lineasComanda de retrofit
-        apiComandas = ApiClient.getClient().create(ApiComandas.class);
-        apiLineaComanda = ApiClient.getClient().create(ApiLineaComanda.class);
-        apiArticulos = ApiClient.getClient().create(ApiArticulos.class);
+        apiComandas = ApiClient.getClient(EditarComandaActivity.this).create(ApiComandas.class);
+        apiLineaComanda = ApiClient.getClient(EditarComandaActivity.this).create(ApiLineaComanda.class);
+        apiArticulos = ApiClient.getClient(EditarComandaActivity.this).create(ApiArticulos.class);
 
         // Obtener referencias a los elementos de la interfaz de usuario
         btnCrear = findViewById(R.id.btnCrear);

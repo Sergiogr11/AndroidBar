@@ -53,8 +53,8 @@ public class ListaArticulosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_articulos);
 
         //Inicializo la api de categorias y articulos de retrofit
-        apiCategorias = ApiClient.getClient().create(ApiCategorias.class);
-        apiArticulos = ApiClient.getClient().create(ApiArticulos.class);
+        apiCategorias = ApiClient.getClient(ListaArticulosActivity.this).create(ApiCategorias.class);
+        apiArticulos = ApiClient.getClient(ListaArticulosActivity.this).create(ApiArticulos.class);
 
         // Obtener referencias a los elementos de la interfaz de usuario
         listViewArticulos = findViewById(R.id.listViewArticulos);

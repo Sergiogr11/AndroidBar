@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContentInfo;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.androidbar.model.Config;
 import com.example.androidbar.model.Usuario;
 import com.example.androidbar.network.ApiClient;
 import com.example.androidbar.network.ApiUsuarios;
@@ -24,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
-
+    private ImageButton configuracionButton;
     private ApiUsuarios apiUsuarios;
 
     @Override
@@ -36,11 +39,12 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.iniciarSesion);
+        configuracionButton = findViewById(R.id.btnConfiguracion);
 
         // Crear instancia de ApiUsuarios utilizando la clase ApiClient
-        apiUsuarios = ApiClient.getClient().create(ApiUsuarios.class);
+        apiUsuarios = ApiClient.getClient(LoginActivity.this).create(ApiUsuarios.class);
 
-        // Configurar el evento de clic del botón de inicio de sesión
+        // Configurar el evento de click del botón de inicio de sesión
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,5 +112,15 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+        //Configurara el evento de click del botón de configuración
+        configuracionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ConfiguracionActivity.class);
+                startActivity(intent);
+            }
+        });
+        
     }
 }

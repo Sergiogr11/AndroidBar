@@ -65,8 +65,8 @@ public class MesasActivity extends AppCompatActivity {
         terrazaButton.setOnClickListener(v -> actualizarMesas("Terraza"));
 
         //Inicializo la api de mesas y comandas de retrofit
-        apiMesas = ApiClient.getClient().create(ApiMesas.class);
-        apiComandas = ApiClient.getClient().create(ApiComandas.class);
+        apiMesas = ApiClient.getClient(MesasActivity.this).create(ApiMesas.class);
+        apiComandas = ApiClient.getClient(MesasActivity.this).create(ApiComandas.class);
     }
 
     private void actualizarMesas(String posicion) {
