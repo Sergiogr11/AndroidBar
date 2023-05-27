@@ -34,7 +34,7 @@ public class LineaComandaAdapter extends RecyclerView.Adapter<LineaComandaAdapte
         LineaComandaDTO lineaComanda = lineasComanda.get(position);
         holder.tvNombreArticulo.setText(lineaComanda.getNombreArticulo());
         holder.tvCantidad.setText(String.valueOf(lineaComanda.getCantidad()));
-        holder.tvPrecio.setText(String.valueOf(lineaComanda.getPrecio()));
+        holder.tvPrecio.setText(String.format("%.2f €", lineaComanda.getPrecio()));
     }
 
     @Override
