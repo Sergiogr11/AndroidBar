@@ -9,15 +9,13 @@
         android:id="@+id/btnMenosCantidad"
         android:layout_width="114dp"
         android:layout_height="51dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="127dp"
         android:background="@drawable/button_rounded"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btnAddArticulo"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cantidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.945"
+        app:layout_constraintVertical_bias="0.948"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <TextView
@@ -78,10 +76,10 @@
         android:text="Añadir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
+        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descripcionArticulo"
-        app:layout_constraintVertical_bias="0.649" />
+        app:layout_constraintVertical_bias="0.643" />
 
     <TextView
         android:id="@+id/cantidad"
@@ -100,27 +98,25 @@
         android:id="@+id/btnMasCantidad"
         android:layout_width="113dp"
         android:layout_height="51dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="20dp"
         android:background="@drawable/button_rounded"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddArticulo"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cantidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.406"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.847"
+        app:layout_constraintVertical_bias="0.845"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="19dp"
-        android:layout_height="46dp"
+        android:layout_width="24dp"
+        android:layout_height="49dp"
         android:text="€"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.892"
+        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.227" />
+        app:layout_constraintVertical_bias="0.224" />
 </androidx.constraintlayout.widget.ConstraintLayout>
