@@ -8,6 +8,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface ApiImpresora {
-    @POST("imprimirBebidayComida")
+    @POST("/imprimirBebidayComida")
     Call<ResponseBody> imprimirBebidayComida(@Body Comanda comanda);
 }

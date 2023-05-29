@@ -48,10 +48,11 @@ public class EditarComandaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_comanda);
 
-        //Inicializo la api de comandas y lineasComanda de retrofit
+        //Inicializo la api correspondientes
         apiComandas = ApiClient.getClient(EditarComandaActivity.this).create(ApiComandas.class);
         apiLineaComanda = ApiClient.getClient(EditarComandaActivity.this).create(ApiLineaComanda.class);
         apiArticulos = ApiClient.getClient(EditarComandaActivity.this).create(ApiArticulos.class);
+        apiImpresora = ApiClient.getClient(EditarComandaActivity.this).create(ApiImpresora.class);
 
         // Obtener referencias a los elementos de la interfaz de usuario
         btnCrear = findViewById(R.id.btnCrear);
@@ -67,7 +68,7 @@ public class EditarComandaActivity extends AppCompatActivity {
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imprimirBebidayComida();
+                imprimirBebidayComida(comandaActiva);
             }
         });
 
@@ -161,8 +162,8 @@ public class EditarComandaActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void imprimirBebidayComida(){
-        apiImpresora.imprimirBebidayComida(comandaActiva).enqueue(new Callback<ResponseBody>() {
+    private void imprimirBebidayComida(Comanda comanda){
+        apiImpresora.imprimirBebidayComida(comanda).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()) {
