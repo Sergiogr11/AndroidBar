@@ -69,6 +69,7 @@ public class EditarComandaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 imprimirBebidayComida(comandaActiva);
+                actualizarPrecioComanda(comandaActiva);
             }
         });
 
@@ -176,6 +177,36 @@ public class EditarComandaActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(EditarComandaActivity.this, "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void actualizarPrecioComanda(Comanda comanda){
+        float precioTotal = 0;
+
+        // Calcular la suma de los precios de todas las líneas de comanda
+        for (LineaComandaDTO lineaComandaDTO : lineaComandaList) {
+            LineaComanda lineaComanda = lineaComandaDTO.getLineaComanda();
+            precioTotal += lineaComanda.getPrecio();
+        }
+
+        // Actualizar el precio de la comanda
+        comanda.setPrecioTotal(precioTotal);
+
+        // Llamar a la API para actualizar la comanda en la base de datos
+        apiComandas.updateComanda(comanda).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(EditarComandaActivity.this, "Precio de comanda actualizado", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EditarComandaActivity.this, "Error al actualizar el precio de la comanda", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(EditarComandaActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }

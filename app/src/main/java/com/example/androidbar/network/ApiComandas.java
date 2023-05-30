@@ -13,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -23,6 +24,9 @@ public interface ApiComandas {
 
     @GET("/findMaxIdComanda")
     Call<Integer> findMaxIdComanda();
+
+    @PUT("/updateComanda")
+    Call<ResponseBody> updateComanda(@Body Comanda comanda);
 
     @POST("/createComanda")
     Call<ResponseBody> createComanda(@Body Comanda comanda);
