@@ -69,7 +69,6 @@ public class EditarComandaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 imprimirBebidayComida(comandaActiva);
-                actualizarPrecioComanda(comandaActiva);
             }
         });
 
@@ -168,6 +167,8 @@ public class EditarComandaActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()) {
+                    actualizarPrecioComanda(comandaActiva);
+                    volverMesas();
                     Toast.makeText(EditarComandaActivity.this, "Comanda Enviada Correctamente", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(EditarComandaActivity.this, "Error al enviar comanda", Toast.LENGTH_SHORT).show();
@@ -209,5 +210,11 @@ public class EditarComandaActivity extends AppCompatActivity {
                 Toast.makeText(EditarComandaActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void volverMesas(){
+        Intent intent = new Intent(EditarComandaActivity.this, MesasActivity.class);
+        intent.putExtra("usuario",  comandaActiva.getUsuarioId());
+        startActivity(intent);
     }
 }

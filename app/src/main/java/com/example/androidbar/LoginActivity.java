@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 // Establecer el usuario y continuar a la siguiente actividad
                                                 Usuario usuario = response.body();
                                                 Intent intent = new Intent(LoginActivity.this, MesasActivity.class);
-                                                intent.putExtra("usuario", usuario);
+                                                intent.putExtra("usuario", usuario.getUserId());
                                                 startActivity(intent);
                                             } else {
                                                 // Ocurrió un error en la solicitud

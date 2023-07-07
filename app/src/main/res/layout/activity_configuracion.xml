@@ -22,9 +22,10 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="223dp"
-        android:layout_height="52dp"
+        android:layout_width="261dp"
+        android:layout_height="60dp"
         android:text="Configuración"
+        android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

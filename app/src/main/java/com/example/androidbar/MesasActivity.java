@@ -39,7 +39,7 @@ public class MesasActivity extends AppCompatActivity {
     private FlexboxLayout flexboxLayout;
     private ApiComandas apiComandas;
     private Comanda comandaActiva;
-    private Usuario usuario;
+    private int usuarioId;
     private String mesaSeleccionada;
 
     @Override
@@ -48,7 +48,7 @@ public class MesasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mesas);
 
         // Obtener el Usuario
-        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        usuarioId = (int) getIntent().getSerializableExtra("usuario");
 
         //Asigno los ids de todos los elementos
         flexboxLayout = findViewById(R.id.flexboxLayout);
@@ -177,18 +177,18 @@ public class MesasActivity extends AppCompatActivity {
                 });
             } else {
                 // Crear una nueva comanda si la mesa está libre
-                crearNuevaComanda(mesa, usuario);
+                crearNuevaComanda(mesa, usuarioId);
             }
     }
 
     // Crear una nueva comanda cuando la mesa está libre
-    private void crearNuevaComanda(Mesa mesa, Usuario usuario) {
+    private void crearNuevaComanda(Mesa mesa, int usuarioId) {
         comandaActiva = new Comanda();
         comandaActiva.setPrecioTotal(0);
         long millis = System.currentTimeMillis();
         comandaActiva.setFechaHoraApertura(millis);
         comandaActiva.setNumeroComensales(mesa.getCapacidad());
-        comandaActiva.setUsuarioId(usuario.getUserId());
+        comandaActiva.setUsuarioId(usuarioId);
         comandaActiva.setMesaId(mesa.getMesaId());
 
         //Guardo la comanda nueva en la base de datos
